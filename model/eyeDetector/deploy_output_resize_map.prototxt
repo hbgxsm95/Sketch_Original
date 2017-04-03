@@ -1,0 +1,401 @@
+name: "FCN"
+# print_net_info: false
+
+input: "data"
+input_dim: 1
+input_dim: 3
+input_dim: 32
+input_dim: 32
+
+
+#####################################################################
+layer {
+  name: "encoder_conv1_1"
+  type: "Convolution"
+  bottom: "data"
+  top: "encoder_conv1_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 20
+    kernel_size: 5
+    pad: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "encoder_relu1_1"
+  type: "ReLU"
+  bottom: "encoder_conv1_1"
+  top: "encoder_conv1_1"
+}
+
+layer {
+  name: "encoder_conv1_2"
+  type: "Convolution"
+  bottom: "encoder_conv1_1"
+  top: "encoder_conv1_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 20
+    kernel_size: 5
+    pad: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "encoder_relu1_2"
+  type: "ReLU"
+  bottom: "encoder_conv1_2"
+  top: "encoder_conv1_2"
+}
+
+
+layer {
+  name: "encoder_pool1"
+  type: "Pooling"
+  bottom: "encoder_conv1_2"
+  top: "encoder_pool1"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+
+###############################################################
+layer {
+  name: "encoder_conv2_1"
+  type: "Convolution"
+  bottom: "encoder_pool1"
+  top: "encoder_conv2_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 30
+    kernel_size: 5
+    pad: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+  }
+}
+layer {
+  name: "encoder_relu2_1"
+  type: "ReLU"
+  bottom: "encoder_conv2_1"
+  top: "encoder_conv2_1"
+}
+
+layer {
+  name: "encoder_conv2_2"
+  type: "Convolution"
+  bottom: "encoder_conv2_1"
+  top: "encoder_conv2_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 30
+    kernel_size: 5
+    pad: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+  }
+}
+layer {
+  name: "encoder_relu2_2"
+  type: "ReLU"
+  bottom: "encoder_conv2_2"
+  top: "encoder_conv2_2"
+}
+
+layer {
+  name: "encoder_pool2"
+  type: "Pooling"
+  bottom: "encoder_conv2_2"
+  top: "encoder_pool2"
+  pooling_param {
+    pool: MAX
+    kernel_size: 2
+    stride: 2
+  }
+}
+
+##########################################################
+layer {
+  name: "encoder_conv3_1"
+  type: "Convolution"
+  bottom: "encoder_pool2"
+  top: "encoder_conv3_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 1
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 40
+    kernel_size: 5
+    pad: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0
+    }
+  }
+}
+layer {
+  name: "encoder_relu3_1"
+  type: "ReLU"
+  bottom: "encoder_conv3_1"
+  top: "encoder_conv3_1"
+}
+layer {
+  name: "encoder_conv3_2"
+  type: "Convolution"
+  bottom: "encoder_conv3_1"
+  top: "encoder_conv3_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 40
+    kernel_size: 5
+    pad: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+  }
+}
+layer {
+  name: "encoder_relu3_2"
+  type: "ReLU"
+  bottom: "encoder_conv3_2"
+ top: "encoder_conv3_2"
+}
+
+###############################################################
+layer {
+  name: "decoder_conv2_1"
+  type: "Deconvolution"
+  bottom: "encoder_conv3_2"
+  top: "decoder_conv2_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 30
+    kernel_size: 2
+    stride: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+  }
+}
+layer {
+  name: "decoder_relu2_1"
+  type: "ReLU"
+  bottom: "decoder_conv2_1"
+  top: "decoder_conv2_1"
+}
+
+
+layer {
+  name: "decoder_conv2_2"
+  type: "Convolution"
+  bottom: "decoder_conv2_1"
+  top: "decoder_conv2_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 30
+    kernel_size: 5
+    pad: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+  }
+}
+layer {
+  name: "decoder_relu2_2"
+  type: "ReLU"
+  bottom: "decoder_conv2_2"
+  top: "decoder_conv2_2"
+}
+
+###############################################################
+
+layer {
+  name: "decoder_conv1_1"
+  type: "Deconvolution"
+  bottom: "decoder_conv2_2"
+  top: "decoder_conv1_1"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 15
+    kernel_size: 2
+    stride: 2
+    weight_filler {
+      type: "gaussian"
+      std: 0.01
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+  }
+}
+layer {
+  name: "decoder_relu1_1" 
+  type: "ReLU"
+  bottom: "decoder_conv1_1"
+  top: "decoder_conv1_1" 
+  #top: "heat-map-pred"
+}
+
+layer {
+  name: "decoder_conv1_2"
+  type: "Convolution"
+  bottom: "decoder_conv1_1"
+  top: "decoder_conv1_2"
+  param {
+    lr_mult: 1
+    decay_mult: 1
+  }
+  param {
+    lr_mult: 2
+    decay_mult: 0
+  }
+  convolution_param {
+    num_output: 5
+    kernel_size: 1
+    weight_filler {
+      type: "gaussian"
+      std: 0.1
+    }
+    bias_filler {
+      type: "constant"
+      value: 0.1
+    }
+  }
+}
+layer {
+  name: "heat-map-pred"
+  type: "ReLU"
+  bottom: "decoder_conv1_2"
+  top: "heat-map-pred"
+}
+
+###############################################################
+
+#layer {
+#  name: "resize_heat-map" 
+#  type: "Resize"
+#  bottom: "heat-map-pred"
+#  top: "resize_heat-map-pred" 
+#  resize_param {
+#	height: 64
+#	width: 64
+#  }
+#}
+#
+#layer {
+#  name: "dummy"
+#  type: "Dummy"
+#  bottom: "resize_heat-map-pred"
+#
+#}
+###############################################################

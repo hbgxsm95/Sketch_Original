@@ -1,0 +1,4 @@
+test1.bmp Succeed Uploaded 2016-06-12_19:18:42.953669
+test2.bmp Succeed Uploaded 2016-06-12_19:18:58.499994
+test3.bmp Succeed Uploaded 2016-06-12_19:19:13.973824
+Total: 3.0 Success: 3.0 Accurate Rate: 1.0
